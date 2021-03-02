@@ -4,6 +4,10 @@ For a map that will be embedded in a high level dashboard that will be viewed at
 
 ## Usage
 
+```sh
+./index.sh
+```
+
 ### Dependancies
 
 1. WSL Ubunutu 20.04
