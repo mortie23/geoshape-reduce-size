@@ -36,7 +36,8 @@ ra = gpd.read_file(inputfile)
 
 # %%
 ## plot the shape file on the map
-ra.plot(column = 'AREASQKM16', cmap='YlOrRd')
+ra['RA_CAT'] = pd.to_numeric(ra['RA_CODE16']) % 10
+ra.plot(column = 'RA_CAT', categorical=True,legend=True,edgecolor='black',figsize=(15, 15))
 
 
 # %%
@@ -45,23 +46,27 @@ ra
 
 
 # %%
+ra.geometry.crs
+
+
+# %%
 ## Clean out polygons without area
 ra_clean = ra[ra.area > 0]
 ## Remove the state from the RA Code before dissolve
-ra_clean['RA_CODE16'] = pd.to_numeric(ra_clean['RA_CODE16']) % 10
+ra_clean['RA_CODE16'] = pd.to_numeric(ra_clean['RA_CODE16']) % 10 + 100
 
 
 # %%
 ## Dissolve state boundaries
 aus = ra_clean.dissolve(by='RA_NAME16', as_index=False)
 ## Overwrite the state fields to Australia
-aus['STE_CODE16'] = None
+aus['STE_CODE16'] = 10
 aus['STE_NAME16'] = 'Australia'
 aus
 
 
 # %%
-aus.plot(column = 'AREASQKM16')
+aus.plot(column = 'RA_CAT', categorical=True,legend=True,edgecolor='black',figsize=(15, 15))
 
 
 # %%
@@ -72,6 +77,10 @@ ra_with_aus
 
 # %%
 ## Write to geojson
-ra_with_aus.to_file("aus.geojson", driver="GeoJSON")
+ra_with_aus.to_file("./RA_2016_AUST_all.geojson", driver="GeoJSON")
+
+
+# %%
+
 
 
