@@ -64,3 +64,9 @@ Open the `dissolve.ipynb` in Jupyter and run cells.
 ### Without state
 
 ![With State](docs/ra-without-state.png)
+
+## Interacting with geospatial data
+
+[VSCode plugin](https://github.com/RandomFractals/geo-data-viewer)
+
+![Screenshot](docs/vscode-plugin.png)
