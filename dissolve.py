@@ -53,7 +53,7 @@ ra.geometry.crs
 ## Clean out polygons without area
 ra_clean = ra[ra.area > 0]
 ## Remove the state from the RA Code before dissolve
-ra_clean['RA_CODE16'] = pd.to_numeric(ra_clean['RA_CODE16']) % 10 + 100
+ra_clean['RA_CODE16'] = pd.to_numeric(ra_clean['RA_CODE16']) % 10 
 
 
 # %%
@@ -62,6 +62,7 @@ aus = ra_clean.dissolve(by='RA_NAME16', as_index=False)
 ## Overwrite the state fields to Australia
 aus['STE_CODE16'] = 10
 aus['STE_NAME16'] = 'Australia'
+aus['RA_CODE16'] = aus['RA_CODE16'] + 100
 aus
 
 
@@ -71,7 +72,7 @@ aus.plot(column = 'RA_CAT', categorical=True,legend=True,edgecolor='black',figsi
 
 # %%
 ## Concatenate the Australia features to the original
-ra_with_aus = gpd.GeoDataFrame( pd.concat( [aus, ra_clean], ignore_index=True) )
+ra_with_aus = gpd.GeoDataFrame( pd.concat( [aus, ra], ignore_index=True) )
 ra_with_aus
 
 
