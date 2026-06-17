@@ -1,0 +1,14 @@
+# Global Configuration for geoshape-reduce-size
+
+paths:
+  # Path to the raw shapefile (.shp)
+  raw_shapefile: "/mnt/c/data/geodata/RA_2016_AUST/RA_2016_AUST.shp"
+  
+  # Path where the converted GeoJSON will be written
+  geojson_output: "/mnt/c/data/geodata/RA_2016_AUST/RA_2016_AUST.geojson"
+  
+  # Path to the simplified GeoJSON
+  simplified_geojson: "data/RA_2016_AUST-simple.geojson"
+  
+  # Path to the dissolved output GeoJSON
+  dissolved_geojson: "data/RA_2016_AUST_all.geojson"

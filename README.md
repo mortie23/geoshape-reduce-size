@@ -2,37 +2,63 @@
 
 ## Reduce size of Shape File
 
-For a map that will be embedded in a high level dashboard that will be viewed at a low resolution, there is no need for great detail on map boarders. The file size of a GeoJSON can be very large and slow down the performance of the load time of the dashboard.
+For a map embedded in a high level dashboard viewed at low resolution, there is no need for great detail on map borders. The file size of a GeoJSON can be very large and slow down page load performance.
+
+### Setup
+
+Requires [uv](https://docs.astral.sh/uv/). Install dependencies:
+
+```sh
+uv sync
+```
+
+### Configuration
+
+Paths are managed in [`config.yaml`](config.yaml). Update these to match your local data location before running:
+
+```yaml
+paths:
+  raw_shapefile: "/path/to/RA_2016_AUST.shp"
+  geojson_output: "/path/to/RA_2016_AUST.geojson"
+  simplified_geojson: "data/RA_2016_AUST-simple.geojson"
+  dissolved_geojson: "data/RA_2016_AUST_all.geojson"
+```
+
+Download the source shapefile from the [ABS](https://www.abs.gov.au/AUSSTATS/abs@.nsf/DetailsPage/1270.0.55.005July%202016?OpenDocument).
 
 ### Usage
 
+**1. Convert** the shapefile to GeoJSON:
+
 ```sh
-./index.sh
+uv run convert
 ```
 
-### Dependancies
+**2. Simplify** the GeoJSON using [mapshaper](https://github.com/mbloch/mapshaper) (Node.js):
 
-1. WSL Ubunutu 20.04
-1. Python3
-   1. geopandas
-1. Node.js
-   1. mapshaper
+```sh
+mapshaper <geojson_output> -simplify dp 1% keep-shapes -o format=geojson data/RA_2016_AUST-simple.geojson
+```
 
-### Inspiration
+**3. Dissolve** state boundaries to produce national remoteness areas:
 
-Using [this](https://blog.exploratory.io/how-to-reduce-your-geojson-file-size-smaller-for-better-performance-8fb77759870c) tutorial.
+```sh
+uv run dissolve
+```
 
 ### Result
 
 ![Original](docs/original-sydney.png)
 
-![Reduce](docs/reduce-sydney.png)
+![Reduced](docs/reduce-sydney.png)
 
-## Dissovle state boundaries
+---
 
-The Remoteness Area boundaries are provided by state, and we want to remove the state boundaries.
+## Dissolve state boundaries
 
-A sample of the properties is:
+The Remoteness Area boundaries are provided by state. This step dissolves those state boundaries to produce a single national feature per remoteness category.
+
+A sample of the input properties:
 
 ```json
 {
@@ -46,27 +72,18 @@ A sample of the properties is:
 }
 ```
 
-### Usage
-
-Open the `dissolve.ipynb` in Jupyter and run cells.
-
-### Dependancies
-
-1. WSL Ubunutu 20.04
-1. VSCode with Ptyhon extension for Jupyter
-1. Python3
-   1. geopandas
-
-### With state
+### With state boundaries
 
 ![With State](docs/ra-with-state.png)
 
-### Without state
+### Without state boundaries
 
-![With State](docs/ra-without-state.png)
+![Without State](docs/ra-without-state.png)
+
+---
 
 ## Interacting with geospatial data
 
-[VSCode plugin](https://github.com/RandomFractals/geo-data-viewer)
+[VSCode Geo Data Viewer plugin](https://github.com/RandomFractals/geo-data-viewer)
 
 ![Screenshot](docs/vscode-plugin.png)
