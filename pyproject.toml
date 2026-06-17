@@ -13,6 +13,7 @@ dependencies = [
 
 [project.scripts]
 convert = "geoshape_reduce_size.convert:main"
+simplify = "geoshape_reduce_size.simplify:main"
 dissolve = "geoshape_reduce_size.dissolve:main"
 
 [build-system]

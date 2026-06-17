@@ -34,10 +34,10 @@ Download the source shapefile from the [ABS](https://www.abs.gov.au/AUSSTATS/abs
 uv run convert
 ```
 
-**2. Simplify** the GeoJSON using [mapshaper](https://github.com/mbloch/mapshaper) (Node.js):
+**2. Simplify** the boundaries to reduce file size:
 
 ```sh
-mapshaper <geojson_output> -simplify dp 1% keep-shapes -o format=geojson data/RA_2016_AUST-simple.geojson
+uv run simplify
 ```
 
 **3. Dissolve** state boundaries to produce national remoteness areas:
@@ -45,6 +45,8 @@ mapshaper <geojson_output> -simplify dp 1% keep-shapes -o format=geojson data/RA
 ```sh
 uv run dissolve
 ```
+
+Simplification uses the Douglas-Peucker algorithm. Adjust `simplify_tolerance` in `config.yaml` to trade off file size vs. boundary detail (units: degrees, default `0.001` ≈ 100m).
 
 ### Result
 
